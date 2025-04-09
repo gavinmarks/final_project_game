@@ -24,22 +24,53 @@ for i1 in tile_x_cords:
         tile_cords.append((i1, i2))
 
 
+class Tile:
+    def __init__(self, x, y, size, color,):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.color = color
+        self.selected = False
+        self.rect = pygame.Rect(x, y, size, size)
 
-def game_tiles(x_coordinate, y_coordinate):
-    pygame.draw.rect(screen, pygame.Color("black"), pygame.Rect(x_coordinate, y_coordinate, 100, 100), 5)
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, self.rect)
+        if self.selected:
+            pygame.draw.rect(screen, pygame.Color("white"), self.rect, 5)
+        else:
+            pygame.draw.rect(screen, pygame.Color("black"), self.rect, 5)
 
+    def handle_click(self, pos):
+        if self.rect.collidepoint(pos):
+            self.selected = not self.selected
+            return True
+        return False
+
+
+more_tiles = []
+for x, y in tile_cords:
+    tiles = Tile(x, y, 100, (pygame.Color("green")))
+    more_tiles.append(tiles)
 
 running = True
 
 while running:
     screen.fill(pygame.Color("white")) 
 
-    for x, y in tile_cords:
-        game_tiles(x, y)
 
+    for tile in more_tiles:
+        tile.draw(screen)
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+            for tile in more_tiles:
+                tile.selected = False
+            for tile in more_tiles:
+                if tile.handle_click(pos):
+                    print(f"Tile at ({tile.x}, {tile.y}) was clicked")
+                    break
+        elif event.type == pygame.QUIT:
             running = False
 
     pygame.display.update()
