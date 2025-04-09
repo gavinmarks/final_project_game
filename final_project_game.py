@@ -3,10 +3,20 @@ import math
 
 pygame.init()
 
-width, height = 1000, 1000
+scale = 100
+
+width, height = 500, 500
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("super fun game")
 
+def scaleAdjust():
+    if width > height:
+        scale = height/10
+    else:
+        scale = width/10
+    print("the scale is:", scale)
+
+scaleAdjust()
 
 #you got me fucked up if you think im putting all those coordinates in a list manually
 tile_cords = []
@@ -17,7 +27,7 @@ count = 0
 for i in range(10):
     tile_x_cords.append(count)
     tile_y_cords.append(count)
-    count = count + 100
+    count = count + 1
 
 for i1 in tile_x_cords:
     for i2 in tile_y_cords:
@@ -49,7 +59,7 @@ class Tile:
 
 more_tiles = []
 for x, y in tile_cords:
-    tiles = Tile(x, y, 100, (pygame.Color("green")))
+    tiles = Tile(x*scale, y*scale, scale, (pygame.Color("green")))
     more_tiles.append(tiles)
 
 running = True
