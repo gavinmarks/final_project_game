@@ -3,20 +3,19 @@ import math
 
 pygame.init()
 
-scale = 100
-
-width, height = 500, 500
+gridSize= 10
+width, height = 600, 600
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("super fun game")
+pygame.display.set_caption("CivLike v0.1.2")
 
-def scaleAdjust():
-    if width > height:
-        scale = height/10
-    else:
-        scale = width/10
-    print("the scale is:", scale)
+def scaleAdjust(tiles):
+    print("width: ", width, "| height: ", height)
+    returnScale = min(width, height)/tiles
+    print("the scale is:", returnScale)
+    return returnScale
 
-scaleAdjust()
+scale = scaleAdjust(gridSize)
+
 
 #you got me fucked up if you think im putting all those coordinates in a list manually
 tile_cords = []
@@ -24,7 +23,7 @@ tile_x_cords = []
 tile_y_cords = []
 count = 0
 
-for i in range(10):
+for i in range(gridSize):
     tile_x_cords.append(count)
     tile_y_cords.append(count)
     count = count + 1
@@ -46,9 +45,9 @@ class Tile:
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, self.rect)
         if self.selected:
-            pygame.draw.rect(screen, pygame.Color("white"), self.rect, 5)
+            pygame.draw.rect(screen, pygame.Color("white"), self.rect, gridSize/2)
         else:
-            pygame.draw.rect(screen, pygame.Color("black"), self.rect, 5)
+            pygame.draw.rect(screen, pygame.Color("black"), self.rect, gridSize/2)
 
     def handle_click(self, pos):
         if self.rect.collidepoint(pos):
@@ -61,6 +60,7 @@ more_tiles = []
 for x, y in tile_cords:
     tiles = Tile(x*scale, y*scale, scale, (pygame.Color("green")))
     more_tiles.append(tiles)
+
 
 running = True
 
