@@ -7,7 +7,7 @@ x_size = 15
 y_size = 15
 width, height = 600, 600
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("CivLike v0.1.5")
+pygame.display.set_caption("CivLife v0.1.5")
 
 #toggle to True for debug print statments so the terminal doesnt fill every time
 DEBUG = True
@@ -44,6 +44,7 @@ class Tile:
         self.selected = False
         self.rect = pygame.Rect(self.x, self.y, size, size)
 
+
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, self.rect)
         border_color = pygame.Color("white") if self.selected else pygame.Color("black")
@@ -55,6 +56,48 @@ class Tile:
             return True
         return False
     
+#tile textures
+
+grass_texture = pygame.image.load("textures/grass.jpg")
+water_texture = pygame.image.load("textures/water.jpg")
+stone_texture = pygame.image.load("textures/stone.jpg")
+
+class grassTile(Tile):
+    def __init__(self,x, y, size, color, scale):
+        super().__init__(x, y, size, color, scale)
+        self.surface = grass_texture
+
+    def draw(self, screen):
+        screen.blit(pygame.transform.scale(self.surface, (int(self.size), int(self.size))), (self.x, self.y))
+        if self.selected:
+            pygame.draw.rect(screen, pygame.Color("white"), self.rect, 2)
+        else:
+            pygame.draw.rect(screen, pygame.Color("black"), self.rect, 1)
+
+class stoneTile(Tile):
+    def __init__(self,x, y, size, color, scale):
+        super().__init__(x, y, size, color, scale)
+        self.surface = stone_texture
+
+    def draw(self, screen):
+        screen.blit(pygame.transform.scale(self.surface, (int(self.size), int(self.size))), (self.x, self.y))
+        if self.selected:
+            pygame.draw.rect(screen, pygame.Color("white"), self.rect, 2)
+        else:
+            pygame.draw.rect(screen, pygame.Color("black"), self.rect, 1)
+
+class waterTile(Tile):
+    def __init__(self,x, y, size, color, scale):
+        super().__init__(x, y, size, color, scale)
+        self.surface = water_texture
+
+    def draw(self, screen):
+        screen.blit(pygame.transform.scale(self.surface, (int(self.size), int(self.size))), (self.x, self.y))
+        if self.selected:
+            pygame.draw.rect(screen, pygame.Color("white"), self.rect, 2)
+        else:
+            pygame.draw.rect(screen, pygame.Color("black"), self.rect, 1)
+
 class Player:
     def __init__(self, x, y, name, size, color, scale):
         self.x = x * size
@@ -72,14 +115,14 @@ class Player:
 tile_map = {}
 for row in tile_coords:
     for x, y in row:
-        tile = Tile(x, y, scale, pygame.Color("green"), scale)
+        tile = grassTile(x, y, scale, pygame.Color("green"), scale)
         tile_map[(x, y)] = tile
 
 if DEBUG:
     print(tile_map)
 
 running = True
-player = None
+player = Player(0,0,"bob",scale, pygame.Color("yellow"), scale)
 while running:
     screen.fill(pygame.Color("white"))
 
