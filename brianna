@@ -1,0 +1,64 @@
+import random
+# Constants
+MAP_SIZE = 5
+EMPTY = "."
+CITY = "C"
+
+class Game:
+    def __init__(self):
+        self.map = [[EMPTY for _ in range(MAP_SIZE)] for _ in range(MAP_SIZE)]
+        self.gold = 0
+        self.turn = 1
+        self.cities = []
+
+    def print_map(self):
+        print("\nMap:")
+        for row in self.map:
+            print(" ".join(row))
+        print()
+
+    def print_stats(self):
+        print(f"Turn: {self.turn} | Gold: {self.gold} | Cities: {len(self.cities)}")
+
+    def build_city(self, x, y):
+        if 0 <= x < MAP_SIZE and 0 <= y < MAP_SIZE:
+            if self.map[y][x] == EMPTY:
+                self.map[y][x] = CITY
+                self.cities.append((x, y))
+                print(f"City built at ({x}, {y})!")
+            else:
+                print("Tile already occupied!")
+        else:
+            print("coordinates!")
+
+    def next_turn(self):
+        self.turn += 1
+        self.gold += len(self.cities)
+        print(f"Turn {self.turn} begins... Collected {len(self.cities)} gold.")
+
+    def run(self):
+        while True:
+            self.print_map()
+            self.print_stats()
+            print("\nActions: [B]uild City | [N]ext Turn | [Q]uit")
+            action = input("Choose action: ").strip().lower()
+
+            if action == 'b':
+                try:
+                    x = int(input("Enter X (0-4): "))
+                    y = int(input("Enter Y (0-4): "))
+                    self.build_city(x, y)
+                except ValueError:
+                    print("enter valid numbers.")
+            elif action == 'n':
+                self.next_turn()
+            elif action == 'q':
+                print("Thanks for playing!")
+                break
+            else:
+                print("Invalid action!")
+
+if __name__ == "__main__":
+    Game().run()
+
+  
